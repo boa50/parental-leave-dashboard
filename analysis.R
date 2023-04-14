@@ -44,8 +44,6 @@ df <- vroom("data/parental_leave.csv",
 
 ### ANALYSIS AND CHARTS
 # Companies with more and less parental leave (total, separated by gender)
-# Maybe a distribution (histogram) chart
-# Create data to be used by the geom_density
 df_density <- df %>% 
   group_by(total_leave) %>% 
   summarise(qty = n(),
@@ -79,6 +77,17 @@ tb_density %>%
                position = "stack") +
   scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
   
+# Bar plot showing the median differences between men and women
+tb_medians <- tibble(
+  gender = c("women", "men"),
+  weeks_leave = c(median(filter(df, total_maternity_leave > 0)$total_maternity_leave),
+                  median(filter(df, total_paternity_leave > 0)$total_paternity_leave))
+)
+  
+tb_medians %>%
+  ggplot(aes(x = weeks_leave, y = gender)) +
+  geom_col(aes(fill = gender)) +
+  scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
 
 # Cards with best and worst companies depending on filters
 
