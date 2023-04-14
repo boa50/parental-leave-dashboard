@@ -78,10 +78,16 @@ tb_density %>%
   scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
   
 # Bar plot showing the median differences between men and women
+df_women_leaves <- df %>% 
+  filter(total_maternity_leave > 0)
+
+df_men_leaves <- df %>% 
+  filter(total_paternity_leave > 0)
+
 tb_medians <- tibble(
   gender = c("women", "men"),
-  weeks_leave = c(median(filter(df, total_maternity_leave > 0)$total_maternity_leave),
-                  median(filter(df, total_paternity_leave > 0)$total_paternity_leave))
+  weeks_leave = c(median(df_women_leaves$total_maternity_leave),
+                  median(df_men_leaves$total_paternity_leave))
 )
   
 tb_medians %>%
@@ -89,6 +95,23 @@ tb_medians %>%
   geom_col(aes(fill = gender)) +
   scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
 
-# Cards with best and worst companies depending on filters
+# What is the proportion of weeks that they are payed
+leave_types <- c("unpaid_women", "paid_women", "unpaid_men", "paid_men")
+
+tb_percentage_payment <- tibble(
+  gender = factor(c(rep("women", 2), rep("men", 2)), levels = c("women", "men")),
+  percentage = c(
+    sum(df_women_leaves$unpaid_maternity_leave) / sum(df_women_leaves$total_maternity_leave),
+    sum(df_women_leaves$paid_maternity_leave) / sum(df_women_leaves$total_maternity_leave),
+    sum(df_men_leaves$unpaid_paternity_leave) / sum(df_men_leaves$total_paternity_leave),
+    sum(df_men_leaves$paid_paternity_leave) / sum(df_men_leaves$total_paternity_leave)
+  ),
+  type = factor(leave_types, levels = leave_types)
+)
+
+tb_percentage_payment %>% 
+  ggplot(aes(x = gender, y = percentage)) +
+  geom_col(aes(fill = type)) +
+  scale_fill_manual(values = c("grey", "#CD8C95", "grey", "#9AC0CD"))
 
 # Check if is there some relation between industries
