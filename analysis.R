@@ -75,7 +75,20 @@ tb_density %>%
   geom_density(aes(fill = leave_type), 
                colour = "transparent", 
                position = "stack") +
-  scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
+  scale_fill_manual(values = c("#9AC0CD", "#CD8C95")) +
+  labs(x = "Weeks leave") +
+  scale_x_continuous(breaks = c(0, 50, 100, 150),
+                     limits = c(0, 160),
+                     expand = expansion(mult = 0)) +
+  scale_y_continuous(expand = expansion(mult = 0)) +
+  theme(
+    legend.position = "none",
+    axis.line.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.x = element_text(margin = margin(t = -3), size = 11)
+  )
   
 # Bar plot showing the median differences between men and women
 df_women_leaves <- df %>% 
