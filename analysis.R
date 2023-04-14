@@ -46,34 +46,38 @@ df <- vroom("data/parental_leave.csv",
 # Companies with more and less parental leave (total, separated by gender)
 # Maybe a distribution (histogram) chart
 # Create data to be used by the geom_density
-df_test <- df %>% 
+df_density <- df %>% 
   group_by(total_leave) %>% 
   summarise(qty = n(),
             women_time = mean(total_maternity_leave)) %>% 
   mutate(men_time = total_leave - women_time,
-         pct_women = women_time / ifelse(total_leave == 0, 1, total_leave),
-         pct_men = men_time / ifelse(total_leave == 0, 1, total_leave),
-         share_women = pct_women * qty,
-         share_men = pct_men * qty) %>% 
-  pivot_longer(c(share_women, share_men)) %>%
-  mutate_if(is.numeric, ~replace_na(., 0)) %>%
-  select(total_leave, name, value)
+         share_women = women_time * qty / ifelse(total_leave == 0, 1, total_leave),
+         share_men = men_time * qty / ifelse(total_leave == 0, 1, total_leave)) %>% 
+  pivot_longer(c(share_women, share_men), 
+               names_to = "leave_type", 
+               values_to = "percentage") %>%
+  select(total_leave, leave_type, percentage)
 
-generate_values <- function(i, tb) {
+generate_values <- function(i, tb, source_df) {
   tb_temp <- tibble(
-    total_leave = df_test[i,]$total_leave,
-    type_leave = rep(df_test[i,]$name, ceiling(df_test[i,]$value))
+    total_leave = source_df[i,]$total_leave,
+    leave_type = rep(source_df[i,]$leave_type, ceiling(source_df[i,]$percentage))
   )
   
   rbind(tb, tb_temp)
 }
 
-tb3 <- tibble()
-tb3 <- purrr::map_df(1:nrow(df_test), generate_values, tb = tb3)
+tb_density <- tibble()
+tb_density <- purrr::map_df(1:nrow(df_density), generate_values, 
+                            tb = tb_density,
+                            source_df = df_density)
 
-tb3 %>% 
+tb_density %>% 
   ggplot(aes(x = total_leave)) + 
-  geom_density(aes(fill = type_leave), position = "stack")
+  geom_density(aes(fill = leave_type), 
+               colour = "transparent", 
+               position = "stack") +
+  scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
   
 
 # Cards with best and worst companies depending on filters
