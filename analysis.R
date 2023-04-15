@@ -106,7 +106,20 @@ tb_medians <- tibble(
 tb_medians %>%
   ggplot(aes(x = weeks_leave, y = gender)) +
   geom_col(aes(fill = gender)) +
-  scale_fill_manual(values = c("#9AC0CD", "#CD8C95"))
+  scale_fill_manual(values = c("#9AC0CD", "#CD8C95")) +
+  labs(x = "Median Weeks Leave") +
+  scale_x_continuous(breaks = c(0, 5, 10, 15),
+                     limits = c(0, 15),
+                     expand = expansion(mult = 0)) +
+  scale_y_discrete(expand = expansion(mult = 0.5)) +
+  theme(
+    legend.position = "none",
+    axis.line.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.x = element_text(margin = margin(t = -3), size = 11)
+  )
 
 # What is the proportion of weeks that they are payed
 leave_types <- c("unpaid_women", "paid_women", "unpaid_men", "paid_men")
@@ -125,6 +138,18 @@ tb_percentage_payment <- tibble(
 tb_percentage_payment %>% 
   ggplot(aes(x = gender, y = percentage)) +
   geom_col(aes(fill = type)) +
-  scale_fill_manual(values = c("grey", "#CD8C95", "grey", "#9AC0CD"))
+  scale_fill_manual(values = c("grey", "#CD8C95", "grey", "#9AC0CD")) +
+  labs(y = "Payment Percentage") +
+  scale_y_continuous(breaks = c(0, .25, .50, .75, 1),
+                     limits = c(0, 1),
+                     expand = expansion(mult = 0)) +
+  scale_x_discrete(expand = expansion(mult = 0.5)) +
+  theme(
+    legend.position = "none",
+    axis.line.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
 
 # Check if is there some relation between industries
