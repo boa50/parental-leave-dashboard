@@ -12,7 +12,9 @@ app_colours <- list(
   no_emphasis = "#757575",
   divergent = "#f57c00",
   line_main = "#42a5f5",
-  line_complementary = "#78909c"
+  line_complementary = "#78909c",
+  women = "#ff84d1",
+  men = "#5a84b6"
 )
 
 theme_minimalistic <- function() {
@@ -75,7 +77,7 @@ tb_density %>%
   geom_density(aes(fill = leave_type), 
                colour = "transparent", 
                position = "stack") +
-  scale_fill_manual(values = c("#9AC0CD", "#CD8C95")) +
+  scale_fill_manual(values = c(app_colours$men, app_colours$women)) +
   labs(x = "Weeks leave") +
   scale_x_continuous(breaks = c(0, 50, 100, 150),
                      limits = c(0, 160),
@@ -106,7 +108,7 @@ tb_medians <- tibble(
 tb_medians %>%
   ggplot(aes(x = weeks_leave, y = gender)) +
   geom_col(aes(fill = gender)) +
-  scale_fill_manual(values = c("#9AC0CD", "#CD8C95")) +
+  scale_fill_manual(values = c(app_colours$men, app_colours$women)) +
   labs(x = "Median Weeks Leave") +
   scale_x_continuous(breaks = c(0, 5, 10, 15),
                      limits = c(0, 15),
@@ -138,7 +140,10 @@ tb_percentage_payment <- tibble(
 tb_percentage_payment %>% 
   ggplot(aes(x = gender, y = percentage)) +
   geom_col(aes(fill = type)) +
-  scale_fill_manual(values = c("grey", "#CD8C95", "grey", "#9AC0CD")) +
+  scale_fill_manual(values = c("#d9d9d9", 
+                               app_colours$women, 
+                               "#d9d9d9", 
+                               app_colours$men)) +
   labs(y = "Payment Percentage") +
   scale_y_continuous(breaks = c(0, .25, .50, .75, 1),
                      limits = c(0, 1),
@@ -146,10 +151,14 @@ tb_percentage_payment %>%
   scale_x_discrete(expand = expansion(mult = 0.5)) +
   theme(
     legend.position = "none",
-    axis.line.x = element_blank(),
-    axis.text.x = element_blank(),
-    axis.title.x = element_blank(),
-    axis.ticks.x = element_blank()
+    # axis.line.x = element_blank(),
+    # axis.text.x = element_blank(),
+    # axis.title.x = element_blank(),
+    # axis.ticks.x = element_blank()
+    axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank()
   )
 
 # Check if is there some relation between industries
