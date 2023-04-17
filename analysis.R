@@ -73,9 +73,9 @@ tb_density <- purrr::map_df(1:nrow(df_density), generate_values,
                             source_df = df_density)
 
 tb_density %>% 
-  ggplot(aes(x = total_leave)) + 
+  ggplot(aes(x = total_leave, after_stat(count))) + 
   geom_density(aes(fill = leave_type), 
-               adjust = 1.7,
+               adjust = 1.5,
                colour = "transparent", 
                position = "stack") +
   scale_fill_manual(values = c(app_colours$men, app_colours$women)) +
@@ -86,12 +86,16 @@ tb_density %>%
   scale_y_continuous(expand = expansion(mult = 0)) +
   theme(
     legend.position = "none",
-    axis.line.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.title.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.title.x = element_text(margin = margin(t = -3), size = 11)
+    axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank()
   )
+
+df_density %>% 
+  pivot_wider(names_from = leave_type, values_from = percentage) %>% 
+  mutate(wm_ratio = share_women / share_men) %>% 
+  filter(wm_ratio >= 0 & wm_ratio <= 9)
   
 # Bar plot showing the median differences between men and women
 df_women_leaves <- df %>% 
@@ -117,12 +121,13 @@ tb_medians %>%
   scale_y_discrete(expand = expansion(mult = 0.5)) +
   theme(
     legend.position = "none",
-    axis.line.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.title.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.title.x = element_text(margin = margin(t = -3), size = 11)
+    axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank()
   )
+
+print(tb_medians)
 
 # What is the proportion of weeks that they are payed
 leave_types <- c("unpaid_women", "paid_women", "unpaid_men", "paid_men")
@@ -152,14 +157,12 @@ tb_percentage_payment %>%
   scale_x_discrete(expand = expansion(mult = 0.5)) +
   theme(
     legend.position = "none",
-    # axis.line.x = element_blank(),
-    # axis.text.x = element_blank(),
-    # axis.title.x = element_blank(),
-    # axis.ticks.x = element_blank()
     axis.line = element_blank(),
     axis.text = element_blank(),
     axis.title = element_blank(),
     axis.ticks = element_blank()
   )
+
+print(tb_percentage_payment)
 
 # Check if is there some relation between industries
