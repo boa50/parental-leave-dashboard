@@ -75,6 +75,7 @@ tb_density <- purrr::map_df(1:nrow(df_density), generate_values,
 tb_density %>% 
   ggplot(aes(x = total_leave)) + 
   geom_density(aes(fill = leave_type), 
+               adjust = 1.7,
                colour = "transparent", 
                position = "stack") +
   scale_fill_manual(values = c(app_colours$men, app_colours$women)) +
