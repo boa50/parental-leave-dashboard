@@ -7,3 +7,5 @@ The link to the designed infographic is: https://www.canva.com/design/DAFgGzIuyo
 Icons used in the infographic:
 https://www.svgrepo.com/svg/165298/couple-with-baby-silhouettes-of-a-family-group
 https://www.svgrepo.com/svg/8284/father-daughter-and-mother
+https://www.svgrepo.com/svg/326872/woman-sharp
+https://www.svgrepo.com/svg/327117/man-sharp

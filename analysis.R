@@ -4,7 +4,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-### DEVAULT VALUES
+### DEFAULT VALUES
 app_colours <- list(
   title = "#616161",
   axis = "#9e9e9e",
